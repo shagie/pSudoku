@@ -22,46 +22,40 @@ use warnings;
 # exit;
 
 
-sub getSubPair
-{
-	my (@n) = @_;
-	my $tn;
-	my @a;
-	
-	@n = sort @n;
-	
-	while(scalar @n)
-	{
-		$tn = shift @n;	
-		foreach my $on (@n)
-		{
-			push @a, [$tn, $on];
-		}
-	}
-	return @a;
+sub getSubPair {
+    my (@n) = @_;
+    my $tn;
+    my @a;
+
+    @n = sort @n;
+
+    while (scalar @n) {
+        $tn = shift @n;
+        foreach my $on (@n) {
+            push @a, [ $tn, $on ];
+        }
+    }
+    return @a;
 }
 
-sub getSubTrip
-{
-	my (@n) = @_;
-	my %a;
-	
-	my @p = getSubPair(@n);
-	@n = sort @n;
-	
-	while (scalar @p)
-	{
-		my $np = shift @p;
-		
-		foreach my $tn (@n)
-		{
-			next if($tn == $np->[0]);
-			next if($tn == $np->[1]);
-			
-			$a{ join(',', sort(@$np, $tn )) } = [ sort(@$np, $tn ) ];
-		}
-	}
-	return map { $a{$_} } sort keys %a;
+sub getSubTrip {
+    my (@n) = @_;
+    my %a;
+
+    my @p = getSubPair(@n);
+    @n = sort @n;
+
+    while (scalar @p) {
+        my $np = shift @p;
+
+        foreach my $tn (@n) {
+            next if ($tn == $np->[0]);
+            next if ($tn == $np->[1]);
+
+            $a{ join(',', sort (@$np, $tn )) } = [ sort (@$np, $tn ) ];
+        }
+    }
+    return map {$a{$_}} sort keys %a;
 }
 
 1;
