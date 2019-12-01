@@ -10,7 +10,7 @@ use Sudoku::World;
 use Sudoku::Util;
 
 # config variables
-my $forbiden_rectangle = 0;
+my $forbidden_rect = 0;
 
 
 {
@@ -62,9 +62,9 @@ my $forbiden_rectangle = 0;
             redo REDUCE;
         }
 
-        if ($forbiden_rectangle and reduceForbidenRectangle($world, $i, $OUTfh)) {
+        if ($forbidden_rect and reduceForbiddenRectangle($world, $i, $OUTfh)) {
             $world->printBoard($OUTfh);
-            $used{'forbiden rectangle'}++;
+            $used{'forbidden rectangle'}++;
             redo REDUCE;
         }
 
@@ -175,9 +175,9 @@ sub reduceBlockBlock {
 }
 
 
-# this function works on the asumption that there is only one solution to the
+# this function works on the assumption that there is only one solution to the
 # Sudoku problem.
-sub reduceForbidenRectangle {
+sub reduceForbiddenRectangle {
     my ($w, $i, $fh) = @_;
 
     my %zh = ();
@@ -209,18 +209,18 @@ sub reduceForbidenRectangle {
             next if ($c->getValue()); # already assigned a value there.
 
             if ($c->isPossible(($zset->[0]->getPossible())[0])) {
-                $c->setImpossible(($zset->[0]->getPossible())[0], "forbiden rect", $i);
+                $c->setImpossible(($zset->[0]->getPossible())[0], "forbidden rect", $i);
                 $c->setColor('red', ($zset->[0]->getPossible())[0]);
                 $answer = 1;
             }
             if ($c->isPossible(($zset->[0]->getPossible())[1])) {
-                $c->setImpossible(($zset->[0]->getPossible())[1], "forbiden rect", $i);
+                $c->setImpossible(($zset->[0]->getPossible())[1], "forbidden rect", $i);
                 $c->setColor('red', ($zset->[0]->getPossible())[1]);
                 $answer = 1;
             }
 
             if ($answer) {
-                $fh->print("Forbiden rectangle eliminates " . join(', ', $zset->[0]->getPossible) . " from " . $c->getRC() . "<br />");
+                $fh->print("Forbidden rectangle eliminates " . join(', ', $zset->[0]->getPossible) . " from " . $c->getRC() . "<br />");
                 foreach my $zi (@$zset) {
                     foreach my $p ($zi->getPossible()) {
                         $zi->setColor('blue', $p);
@@ -233,6 +233,7 @@ sub reduceForbidenRectangle {
 
     0;
 }
+
 
 sub reduceAPE {
     my ($w, $i, $fh) = @_;
@@ -516,6 +517,7 @@ sub reduceChain {
     0;
 }
 
+
 sub reduceYWing {
     my ($w, $i, $fh) = @_;
 
@@ -607,7 +609,6 @@ sub reduceYWing {
 }
 
 
-
 sub reduceNakedPair {
     my ($w, $i, $fh) = @_;
     my $answer = 0;
@@ -648,6 +649,7 @@ sub reduceNakedPair {
 
     return $answer;
 }
+
 
 sub reduceHiddenPair {
     my ($world, $i, $fh) = @_;
@@ -710,7 +712,7 @@ sub reduceHiddenPair {
 # C - (1,2  ) (  2,3) (1,2,3) x3
 # D - (1,2  ) (  2,3) (1,  3) x1
 
-sub reduceNakedtriple {
+sub reduceNakedTriple {
     my ($w, $i, $fh) = @_;
 
     foreach my $l ($w->getLines()) {
@@ -846,6 +848,7 @@ sub reduceSimple {
     return $answer;
 }
 
+
 sub reduceForced {
     my ($world, $i, $fh) = @_;
     my $answer = 0;
@@ -860,6 +863,7 @@ sub reduceForced {
 
     return $answer;
 }
+
 
 sub reduceOnly {
     my ($world, $i, $fh) = @_;
@@ -889,6 +893,7 @@ sub reduceOnly {
 
     $answer;
 }
+
 
 sub reduceIntersect {
     my ($world, $i, $fh) = @_;
@@ -961,6 +966,7 @@ sub reduceIntersect {
     }
     $answer;
 }
+
 
 sub reduceXWing {
     my ($world, $i, $fh) = @_;
@@ -1050,7 +1056,6 @@ sub reduceXWing {
         }
 
     }
-
 
     # columns
     foreach my $l (grep {$_->getName() =~ m/X/} $world->getLines()) {
