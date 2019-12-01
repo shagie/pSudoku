@@ -2,6 +2,7 @@ package Sudoku::Value;
 
 use strict;
 use lib "..";
+use warnings;
 
 use Hash::Util;
 use Sudoku::Line;

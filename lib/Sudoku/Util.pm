@@ -1,6 +1,8 @@
 package Sudoku::Util;
 
 use strict;
+use warnings;
+
 
 # {
 # 	my @p = getSubPair(1,2,3,4,5);
